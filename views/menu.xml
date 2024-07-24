@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <menuitem 
+        id="menu"
+        name="Facebook Marketing"
+        sequence="2"
+    />
+
+    <menuitem 
+        id="menu_manager_account"
+        name="Manager Account"
+        parent="menu"
+        action="action_manager_account"
+        sequence="0"
+    />
+
+</odoo>

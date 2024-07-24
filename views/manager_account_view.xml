@@ -1,0 +1,65 @@
+<odoo>
+    <record id="view_manager_account_form" model="ir.ui.view">
+        <field name="name">manager.account.form</field>
+        <field name="model">manager.account</field>
+        <field name="arch" type="xml">
+            <form string="Manager Account">
+                <sheet>
+                    <group>
+                        <field name="account_id"/>
+                        <field name="access_token"/>
+                    </group>
+                    <group>
+                        <button name="load_data" string="Load Information" type="object" class="oe_highlight" context="{'id': id}"/>
+                    </group>
+                    <notebook colspan="1">
+                        <page string="Account Information" name="account_info">
+                            <group>
+                                <field name="account_id"/>
+                                <field name="access_token"/>
+                                <field name="account_name"/>
+                                <field name="account_avatar" widget="image" height="240px"/>
+                            </group>
+                        </page>
+                        <page string="More Information" name="more_info">
+                            <group>
+                                <field name="page_name"/>
+                                <field name="page_id"/>
+                                <field name="category_name"/>
+                                <field name="category_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+  <record id="manager_account_tree" model="ir.ui.view">
+        <field name="name">manager.account.tree</field>
+        <field name="model">manager.account</field>
+        <field name="arch" type="xml">
+            <tree string="Tài khoản" create="1" delete="1" edit="0">
+                <field name="account_id"/>
+                <field name="access_token"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_manager_account" model="ir.actions.act_window">
+        <field name="name">Tài khoản</field>
+        <field name="res_model">manager.account</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="domain">[]</field>
+        <field name="context"></field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Hãy thêm một tài khoản
+            </p>
+        </field>
+    </record>
+    
+    
+</odoo>
