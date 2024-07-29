@@ -1,2 +1,3 @@
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
 from . import manager_account
+from . import fb_category
+from . import res_config_settings

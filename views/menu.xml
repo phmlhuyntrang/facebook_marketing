@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-     <menuitem 
-        id="menu"
+    <menuitem 
+        id="menu_root"
         name="Facebook Marketing"
         sequence="2"
     />
@@ -10,8 +10,16 @@
     <menuitem 
         id="menu_manager_account"
         name="Manager Account"
-        parent="menu"
+        parent="menu_root"
         action="action_manager_account"
+        sequence="0"
+    />
+
+    <menuitem 
+        id="menu_facebook_category" 
+        name="Categories Mapping" 
+        action="action_facebook_category" 
+        parent="menu_root"  
         sequence="0"
     />
 

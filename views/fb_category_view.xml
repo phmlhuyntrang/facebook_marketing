@@ -1,0 +1,51 @@
+<odoo>
+    <data>
+        <record id="action_fetch_category_facebook" model="ir.actions.server">
+            <field name="name">Fetch Facebook Category</field>
+            <field name="model_id" ref="model_facebook_category"/>
+            <field name="state">code</field>
+            <field name="code">
+                    action = records.fetch_facebook_categories()
+            </field>
+        </record>
+
+        <record id="view_facebook_category_tree" model="ir.ui.view">
+            <field name="name">facebook.category.tree</field>
+            <field name="model">facebook.category</field>
+            <field name="arch" type="xml">
+                <tree string="Facebook Categories">
+                    <field name="facebook_name" readonly="1"/>
+                    <field name="facebook_id" readonly="1"/>
+                    <field name="parent_category" readonly="1"/>
+                    <field name="parent_category_path" readonly="1"/>
+                    <button name="%(action_fetch_category_facebook)d" type="action" string="Update Category" class="oe_highlight" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view for Facebook Categories -->
+        <record id="view_facebook_category_form" model="ir.ui.view">
+            <field name="name">facebook.category.form</field>
+            <field name="model">facebook.category</field>
+            <field name="arch" type="xml">
+                <form string="Facebook Category">
+                    <sheet>
+                        <group>
+                            <field name="facebook_name" readonly="1"/>
+                            <field name="facebook_id" readonly="1"/>
+                            <field name="parent_category" readonly="1"/>
+                            <field name="parent_category_path" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to open the list of Facebook Categories -->
+        <record id="action_facebook_category" model="ir.actions.act_window">
+            <field name="name">Facebook Categories</field>
+            <field name="res_model">facebook.category</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

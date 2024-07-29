@@ -15,18 +15,21 @@
                     <notebook colspan="1">
                         <page string="Account Information" name="account_info">
                             <group>
-                                <field name="account_id"/>
-                                <field name="access_token"/>
-                                <field name="account_name"/>
-                                <field name="account_avatar" widget="image" height="240px"/>
+                                <field name="account_name" readonly="1"/>
+                                <field name="account_avatar" readonly="1" widget="image"/>
                             </group>
                         </page>
-                        <page string="More Information" name="more_info">
+                        <page string="Pages List" name="pages_list">
+                            <tree string="Facebook Page">
+                                <field name="page_name" readonly="1"/>
+                                <field name="page_id" readonly="1"/>
+                                <field name="category" readonly="1"/>
+                                <field name="category_list" readonly="1"/>
+                            </tree>
+                        </page>
+                        <page string="Groups List" name="groups_list">
                             <group>
-                                <field name="page_name"/>
-                                <field name="page_id"/>
-                                <field name="category_name"/>
-                                <field name="category_id"/>
+                
                             </group>
                         </page>
                     </notebook>
@@ -40,8 +43,10 @@
         <field name="model">manager.account</field>
         <field name="arch" type="xml">
             <tree string="Tài khoản" create="1" delete="1" edit="0">
-                <field name="account_id"/>
-                <field name="access_token"/>
+                <!-- <field name="account_id"/>
+                <field name="access_token"/> -->
+                <field name="account_name" readonly="1"/>
+                <field name="account_avatar" readonly="1" widget="image"/>
             </tree>
         </field>
     </record>

@@ -38,8 +38,10 @@
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
-        'views/menu.xml',
         'views/manager_account_view.xml',
+        'views/fb_category_view.xml',
+        'views/res_config_settings_views.xml',
+        'views/menu.xml',
     ],
 
     # Import các file cấu hình (chỉ gọi từ folder 'static')
