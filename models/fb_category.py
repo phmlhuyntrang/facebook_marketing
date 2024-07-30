@@ -10,16 +10,10 @@ class FacebookCategory(models.Model):
     _description = 'Facebook Categories List'
 
     # Các trường dữ liệu của model
-<<<<<<< HEAD
     fb_category_name = fields.Char(string='Category Name')
     fb_category_id = fields.Char(string='Category ID')
-    parent_category = fields.Many2one('facebook.category', string='Parent Category', index=True, ondelete='cascade')
-=======
-    facebook_name = fields.Char(string='Category Name')
-    facebook_id = fields.Char(string='Category ID')
     parent_category = fields.Many2one('facebook.category', string='Parent Category', index=True, ondelete='set null')
-    # parent_category_name = fields.Char(string='Parent Category Name', related='parent_category.facebook_name', store=True)
->>>>>>> origin/main
+    # parent_category_name = fields.Char(string='Parent Category Name', related='parent_category.fb_category_name', store=True)
     parent_category_path = fields.Char(string='Parent Path')
     blog_category = fields.Many2many('blog.tag.category', string='Blog Categories')
     product_category = fields.Many2many('product.public.category', string='Product Categories')

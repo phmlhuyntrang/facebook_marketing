@@ -12,15 +12,9 @@
             <field name="name">facebook.category.tree</field>
             <field name="model">facebook.category</field>
             <field name="arch" type="xml">
-<<<<<<< HEAD
-                <tree string="Facebook Categories">
+                <tree string="Facebook Categories" js_class="list_test">
                     <field name="fb_category_name" readonly="1"/>
                     <field name="fb_category_id" readonly="1"/>
-=======
-                <tree string="Facebook Categories" js_class="list_test">
-                    <field name="facebook_name" readonly="1"/>
-                    <field name="facebook_id" readonly="1"/>
->>>>>>> origin/main
                     <field name="parent_category" readonly="1"/>
                     <field name="parent_category_path" readonly="1"/>
                     <!-- <button name="%(action_fetch_category_facebook)d" type="action" string="Update Category" class="oe_highlight" readonly="1"/> -->
