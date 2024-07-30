@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="facebook_marketing.list_test" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//button[@class='btn btn-primary o_list_button_add']" position="replace">
+            <button type="button" class="btn btn-primary o_list_button_add" data-hotkey="c" t-on-click="onClick_Update_Categories" data-bounce-button="">
+                Update
+            </button>
+        </xpath>
+        <xpath expr="//CogMenu" position="after">
+            <!-- <t t-set="token" t-value="request.env['ir.config_parameter'].sudo().get_param('facebook.api_token')"></t>
+            <input id="input"> <t t-esc="token"/> </input> -->
+        </xpath>
+    </t>
+</templates>
