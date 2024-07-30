@@ -12,14 +12,16 @@ class FacebookCategory(models.Model):
     # Các trường dữ liệu của model
     facebook_name = fields.Char(string='Category Name')
     facebook_id = fields.Char(string='Category ID')
-    parent_category = fields.Many2one('facebook.category', string='Parent Category', index=True, ondelete='cascade')
+    parent_category = fields.Many2one('facebook.category', string='Parent Category', index=True, ondelete='set null')
+    # parent_category_name = fields.Char(string='Parent Category Name', related='parent_category.facebook_name', store=True)
     parent_category_path = fields.Char(string='Parent Path')
-
+    blog_category = fields.Many2many('blog.tag.category', string='Blog Categories')
+    product_category = fields.Many2many('product.public.category', string='Product Categories')
     def _format_category_name(self, category):
         # Giả sử phương thức này định dạng tên danh mục theo một cách nào đó
         return category.get('name', '').strip().title()
 
-    def _create_or_update_category(self, categories, parent_category_id, parent_category_path):
+    def _create_or_update_category(self,categories,parent_category_id, parent_category_path):
         for category in categories:
             # Tạo hoặc cập nhật danh mục và các danh mục con
             facebook_name = category.get('name')
@@ -30,6 +32,7 @@ class FacebookCategory(models.Model):
                 'facebook_name': facebook_name,
                 'facebook_id': facebook_id,
                 'parent_category': parent_category_id,
+                # 'parent_category_name': parent_category_name,
                 'parent_category_path': path, 
             })
 
@@ -56,5 +59,8 @@ class FacebookCategory(models.Model):
             })
             parent_category_path = ''
             self._create_or_update_category(categories, parent_category.id, parent_category_path)
+
         else:
             _logger.error("Không thể kết nối với Facebook API để lấy category facebook. Mã lỗi: %s, Phản hồi: %s", response.status_code, response.text)
+
+

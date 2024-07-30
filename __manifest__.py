@@ -23,8 +23,7 @@
     # Khi hoạt động, category trong 'depends' phải được install
     ### rồi module này mới đc install
     # 'depends': [],
-    'depends': ['base'],
-    'depends': ['base', 'bus'],
+    'depends': ['base', 'bus', 'web','website_blog','website_sale'],
     # Module có được phép install hay không
     # Nếu bạn thắc mắc nếu tắt thì làm sao để install
     # Bạn có thể dùng 'auto_install'
@@ -40,6 +39,8 @@
         'security/ir.model.access.csv',
         'views/manager_account_view.xml',
         'views/fb_category_view.xml',
+        # 'js/update_categories.js',
+        # 'button_update/xml/update_categories.xml',
         'views/res_config_settings_views.xml',
         'views/menu.xml',
     ],
@@ -50,7 +51,10 @@
     ## + các chỉnh sửa giao diện
     ## + t
     'assets': {
-
+        'web.assets_backend': [
+            'facebook_marketing/static/src/js/*.js',
+            'facebook_marketing/static/src/xml/*.xml',
+        ],
     },
     'license': 'LGPL-3',
 }
