@@ -10,8 +10,8 @@ class FacebookCategory(models.Model):
     _description = 'Facebook Categories List'
 
     # Các trường dữ liệu của model
-    facebook_name = fields.Char(string='Category Name')
-    facebook_id = fields.Char(string='Category ID')
+    fb_category_name = fields.Char(string='Category Name')
+    fb_category_id = fields.Char(string='Category ID')
     parent_category = fields.Many2one('facebook.category', string='Parent Category', index=True, ondelete='cascade')
     parent_category_path = fields.Char(string='Parent Path')
 
@@ -22,13 +22,13 @@ class FacebookCategory(models.Model):
     def _create_or_update_category(self, categories, parent_category_id, parent_category_path):
         for category in categories:
             # Tạo hoặc cập nhật danh mục và các danh mục con
-            facebook_name = category.get('name')
-            facebook_id = category.get('id')
-            path = parent_category_path + '/' + facebook_name
-
+            fb_category_name = category.get('name')
+            fb_category_id = category.get('id')
+            path = parent_category_path + '/' + fb_category_name
+            
             category_record = self.create({
-                'facebook_name': facebook_name,
-                'facebook_id': facebook_id,
+                'fb_category_name': fb_category_name,
+                'fb_category_id': fb_category_id,
                 'parent_category': parent_category_id,
                 'parent_category_path': path, 
             })
@@ -49,8 +49,8 @@ class FacebookCategory(models.Model):
             _logger.info("Kết nối thành công với Facebook API để lấy danh sách category.")
             
             parent_category = self.create({
-                'facebook_name': None,
-                'facebook_id': None,
+                'fb_category_name': None,
+                'fb_category_id': None,
                 'parent_category': None,
                 'parent_category_path': None,
             })

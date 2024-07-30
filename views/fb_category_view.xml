@@ -14,8 +14,8 @@
             <field name="model">facebook.category</field>
             <field name="arch" type="xml">
                 <tree string="Facebook Categories">
-                    <field name="facebook_name" readonly="1"/>
-                    <field name="facebook_id" readonly="1"/>
+                    <field name="fb_category_name" readonly="1"/>
+                    <field name="fb_category_id" readonly="1"/>
                     <field name="parent_category" readonly="1"/>
                     <field name="parent_category_path" readonly="1"/>
                     <button name="%(action_fetch_category_facebook)d" type="action" string="Update Category" class="oe_highlight" readonly="1"/>
@@ -31,8 +31,8 @@
                 <form string="Facebook Category">
                     <sheet>
                         <group>
-                            <field name="facebook_name" readonly="1"/>
-                            <field name="facebook_id" readonly="1"/>
+                            <field name="fb_category_name" readonly="1"/>
+                            <field name="fb_category_id" readonly="1"/>
                             <field name="parent_category" readonly="1"/>
                             <field name="parent_category_path" readonly="1"/>
                         </group>

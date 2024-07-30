@@ -27,5 +27,19 @@
             <field name ="implied_ids" eval="[(4, ref('group_manager_fb_category_user'))]"/>
             <field name ="users" eval="[(4, ref('base.user_root')),(4, ref('base.user_admin'))]"/>
         </record>
+
+        <record id="group_manager_fb_page_user" model="res.groups"> 
+            <field name="name">Manager Facebook Page User</field>
+            <field name ="category_id" ref="base.module_category_social"/>
+            <field name ="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        
+        <record id="group_manager_fb_page_manager" model="res.groups"> 
+            <field name="name">Manager Facebook Page Manager</field>
+            <field name ="category_id" ref="base.module_category_social"/>
+            <field name ="implied_ids" eval="[(4, ref('group_manager_fb_page_user'))]"/>
+            <field name ="users" eval="[(4, ref('base.user_root')),(4, ref('base.user_admin'))]"/>
+        </record>
     </data>
 </odoo>
