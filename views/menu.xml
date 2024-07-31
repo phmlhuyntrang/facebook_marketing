@@ -23,4 +23,12 @@
         sequence="0"
     />
 
+    <menuitem 
+        id="menu_facebook_page" 
+        name="Facebook Page" 
+        action="action_facebook_page" 
+        parent="menu_root"  
+        sequence="0"
+    />
+
 </odoo>

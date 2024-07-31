@@ -8,31 +8,19 @@ import io
 class ManagerAccount(models.Model):
     _name = 'manager.account'
     _description = 'Load account facebook information'
+    
+    # _inherit = ['mail.thread', 'mail.activity.mixin']
 
+    # Thêm trường này
+    is_favorite = fields.Boolean(string="Favorite", default=False, tracking=True)
+    
     account_id = fields.Char(string='Account ID', required=True)
     access_token = fields.Text('Access Token', required=True)
     account_name = fields.Char('User Name')
     account_avatar = fields.Binary('Avatar')
 
     page_ids = fields.One2many('facebook.page', 'account_id', string="Pages")
-    # page_name = fields.Char(string="Name")
-    # page_id = fields.Char(string="Page ID")
-    # category_name = fields.Char(string="Category Name")
-    # category_id = fields.Char(string="Category ID")
-    # category = fields.Many2many('facebook.category', string='Category', index=True, ondelete='cascade')
-    # category_list = fields.Text(string="Category List")
 
-  
-    # def load_data(self):
-    #     id = self.env.context.get("id")
-    #     account_info = None
-    #     for value in self:
-    #         if value.id == id:
-    #            account_info = value
-    #     self.load_account_info(account_info)
-    #     self.load_account_ava(account_info)
-    #     self.load_pages(account_info)
-    #     return None
     def load_data(self):
         for record in self:
             record.load_account_info()
@@ -78,61 +66,6 @@ class ManagerAccount(models.Model):
             })
         return None
     
-    
-    # def load_pages(self):
-    #     url_pages_request = f'https://graph.facebook.com/v20.0/{self.account_id}/accounts?access_token={self.access_token}'
-    #     try:
-    #         pages_response = requests.get(url_pages_request)
-    #         page_data = pages_response.json()
-
-    #         if page_data:
-    #             pages = pages_response.json().get('data', [])
-
-    #             for page in pages:
-    #                 # page_name = page.get('name')
-    #                 # page_id = page.get('id')
-
-    #                 #set field
-
-    #                 self.page_name = page.get('name')
-    #                 self.page_id = page.get('id')
-
-    #                 subcategories = page.get('category_list', [])
-    #                 if subcategories:
-    #                     for category_item in subcategories:
-    #                        self.get_page_categories(category_item)
-
-    #     except requests.exceptions.RequestException as e:
-    #         print(f"Đã xảy ra lỗi khi gọi API Get Page: {e}")
-    #         self.env['bus.bus']._sendone(self.env.user.partner_id, 'simple_notification', {
-    #             'title': 'Lỗi',
-    #             'message': f"Đã xảy ra lỗi khi gọi API: {e}",
-    #             'type': 'danger',
-    #         })
-    #     return None
-    
-    # def get_page_categories(self, category):
-    #     category_name = category.get('name')
-    #     category_id = category.get('id')
-
-    #     category_record = self.create({
-    #         'category_name': category_name,
-    #         'category_id': category_id,
-    #     })
-
-    #     return None
-    def get_page_categories(self, category):
-        category_name = category.get('name')
-        category_id = category.get('id')
-
-        category_record = self.env['facebook.category'].create({
-            'fb_category_name': category_name,
-            'fb_category_id': category_id,
-        })
-
-        self.write({
-            'category': [(4, category_record.id)]
-        })
 
     def load_pages(self):
         url_pages_request = f'https://graph.facebook.com/v20.0/{self.account_id}/accounts?access_token={self.access_token}'
@@ -149,13 +82,15 @@ class ManagerAccount(models.Model):
                             'account_id': self.id,
                             'page_name': page['name'],
                             'page_id': page['id'],
-                            # 'access_token': page['access_token'],
+                            'page_avatar': self.get_pages_ava(page['id']),
+                            'access_token': page['access_token'],
                             'category': page['category']
                         })
                     else:
                         facebook_page.write({
                             'page_name': page['name'],
-                            # 'access_token': page['access_token'],
+                            'page_avatar': self.get_pages_ava(page['id']),
+                            'access_token': page['access_token'],
                             'category': page['category']
                         })
 
@@ -187,4 +122,24 @@ class ManagerAccount(models.Model):
                 'type': 'danger',
             })
         return None
-            
+    
+    def get_pages_ava(self, page_id):
+        url_page_ava_request = f'https://graph.facebook.com/v20.0/{page_id}/picture?type=large&access_token={self.access_token}'
+        try:
+            avatar_page_response = requests.get(url_page_ava_request)
+            return base64.b64encode(avatar_page_response.content)
+            # logging.info(base64.b64encode(avatar_page_response.content))
+            # return base64.b64encode(avatar_page_response.content)
+
+        except requests.exceptions.RequestException as e:
+            print(f"Đã xảy ra lỗi khi gọi API Get Avatar Page: {e}")
+            self.env['bus.bus']._sendone(self.env.user.partner_id, 'simple_notification', {
+                'title': 'Lỗi',
+                'message': f"Đã xảy ra lỗi khi gọi API: {e}",
+                'type': 'danger',
+            })
+            return None   
+        
+    def toggle_favorite(self):
+        for record in self:
+            record.is_favorite = not record.is_favorite

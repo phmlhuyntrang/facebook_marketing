@@ -4,13 +4,18 @@
         <field name="model">manager.account</field>
         <field name="arch" type="xml">
             <form string="Manager Account">
+                <header>
+                    <button name="load_data" string="Load Information" type="object" class="oe_highlight" context="{'id': id}"/>
+                </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_favorite" type="object" class="oe_stat_button" icon="fa-star">
+                            <field name="is_favorite" widget="boolean_favorite"/>
+                        </button>
+                    </div>
                     <group>
                         <field name="account_id"/>
                         <field name="access_token"/>
-                    </group>
-                    <group>
-                        <button name="load_data" string="Load Information" type="object" class="oe_highlight" context="{'id': id}"/>
                     </group>
                     <notebook colspan="1">
                         <page string="Account Information" name="account_info">
@@ -19,20 +24,19 @@
                                 <field name="account_avatar" readonly="1" widget="image"/>
                             </group>
                         </page>
-                       
-                        <page string="Pages" name="pages_list">
+                        <page string="Pages List" name="pages_list">
                             <field name="page_ids" readonly="1">
                                 <tree>
+                                    <field name="is_favorite" widget="boolean_favorite" nolabel="1"/>
+                                    <field name="page_avatar" widget="image"/>
                                     <field name="page_name"/>
                                     <field name="page_id"/>
                                     <field name="category"/>
                                 </tree> 
                             </field>
                         </page>
-
                         <page string="Groups List" name="groups_list">
                             <group>
-                
                             </group>
                         </page>
                     </notebook>
@@ -49,6 +53,7 @@
                 <field name="id"/>
                 <field name="account_name"/>
                 <field name="account_avatar"/>
+                <field name="is_favorite"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
@@ -60,6 +65,7 @@
                                             <field name="account_name"/>
                                         </strong>
                                     </div>
+                                    <field name="is_favorite" widget="boolean_favorite" nolabel="1"/>
                                 </div>
                             </div>
                         </div>
@@ -69,33 +75,30 @@
         </field>
     </record>
 
-    <record id="manager_account_tree" model="ir.ui.view">
-        <field name="name">manager.account.tree</field>
-        <field name="model">manager.account</field>
-        <field name="arch" type="xml">
-            <tree string="Tài khoản" create="1" delete="1" edit="0">
-                <!-- <field name="account_id"/>
-                <field name="access_token"/> -->
-                <field name="account_avatar" readonly="1" widget="image"/>
-                <field name="account_name" readonly="1"/>
-            </tree>
-        </field>
-    </record>
-    
-    <record id="action_manager_account" model="ir.actions.act_window">
-        <field name="name">Tài khoản</field>
-        <field name="res_model">manager.account</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="view_id" ref="manager_account_kanban"/>
-        <field name="domain">[]</field>
-        <field name="context">{}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Hãy thêm một tài khoản
-            </p>
-        </field>
-    </record>
-    
-
-    
+        <record id="manager_account_tree" model="ir.ui.view">
+            <field name="name">manager.account.tree</field>
+            <field name="model">manager.account</field>
+            <field name="arch" type="xml">
+                <tree string="Tài khoản" create="1" delete="1" edit="0">
+                    <field name="is_favorite" widget="boolean_favorite" nolabel="1"/>
+                    <field name="account_avatar" readonly="1" widget="image"/>
+                    <field name="account_name" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_manager_account" model="ir.actions.act_window">
+            <field name="name">Tài khoản</field>
+            <field name="res_model">manager.account</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_id" ref="manager_account_kanban"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Hãy thêm một tài khoản
+                </p>
+            </field>
+        </record>
+        
 </odoo>

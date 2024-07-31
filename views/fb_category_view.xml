@@ -36,7 +36,7 @@
                         <notebook>
                             <page string="Blog Categories">
                                 <div class="o_form_label" style="font-weight:bold;">Add category</div>
-                                <field name="blog_category" widget="many2many_tags"/>
+                                <field name="blog_category"/>
                                 <!-- <field name="prodcut_category" widget="many2many_tags"/> -->
                                 <tree string="Tree String">
                                     
@@ -44,7 +44,7 @@
                             </page>
                             <page string="Product Categories">
                                 <div class="o_form_label" style="font-weight:bold;">Add category</div>
-                                <field name="product_category" widget="many2many_tags"/>
+                                <field name="product_category"/>
                                 <!-- <field name="prodcut_category" widget="many2many_tags"/> -->
                                 <tree string="Tree String">
     
