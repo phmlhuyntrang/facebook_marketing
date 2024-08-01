@@ -1,4 +1,13 @@
 <odoo>
+    <record id="action_post_blog_to_facebook" model="ir.actions.server">
+            <field name="name">Post to facebook</field>
+            <field name="model_id" ref="model_marketing_post"/>
+            <field name="state">code</field>
+            <field name="code">
+                    action = records.post_blog_to_facebook()
+            </field>
+        </record>
+    
     <record id="view_marketing_post_form" model="ir.ui.view">
         <field name="name">marketing.post.form</field>
         <field name="model">marketing.post</field>
@@ -10,7 +19,7 @@
                         <field name="page"/>
                         <field name="blog"/>
                     </group>
-                    <button name="post_blog_to_facebook" type="object" string="Post to Facebook" class="btn-primary"/>
+                    <button name="%(action_post_blog_to_facebook)d" type="action" string="Post to Facebook" class="btn-primary"/>
                 </sheet>
             </form>
         </field>

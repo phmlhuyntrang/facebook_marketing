@@ -19,6 +19,7 @@
                         <field name="category" readonly="1"/>
                         <field name="category_ids" widget="many2many_tags" readonly="1"/>
                         <field name="account_id" readonly="1"/>
+                        <field name="access_token"/>
                         <!-- Ẩn trường is_favorite -->
                         <field name="is_favorite" />
                     </group>
