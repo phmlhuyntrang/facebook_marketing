@@ -43,12 +43,12 @@
                                 </tree>
                             </page>
                             <page string="Product Categories">
-                                <div class="o_form_label" style="font-weight:bold;">Add category</div>
-                                <field name="product_category"/>
-                                <!-- <field name="prodcut_category" widget="many2many_tags"/> -->
-                                <tree string="Tree String">
-    
-                                </tree>
+                                <field name="product_category">
+                                    <tree>
+                                        <field name="name" string="Name"/>
+                                        <field name="display_name" string="Display_name"/>
+                                    </tree>
+                                </field>
                             </page>
                         </notebook>
                     </sheet>
