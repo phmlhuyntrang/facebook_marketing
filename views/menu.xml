@@ -31,4 +31,12 @@
         sequence="0"
     />
 
+    <menuitem 
+        id="menu_marketing_product"
+        name="Marketing Products"
+        action="action_marketing_product" 
+        parent="menu_root"  
+        sequence="0"
+    />
+
 </odoo>
