@@ -1,6 +1,7 @@
 import logging
+from venv import logger
 import requests
-from odoo import models, fields, api
+from odoo import models, fields, api # type: ignore
 from odoo.addons.http_routing.models.ir_http import slug
 from odoo.http import request
 from datetime import datetime
@@ -19,7 +20,8 @@ class FacebookPage(models.Model):
     schedule_post = fields.Datetime(string='Schedule Post', required=True)
     remind_time = fields.Datetime(string='Remind Time', required=True)
    
-    post_ids = fields.One2many('marketing.product.post', 'marketing_product_id', string='Posts')
+    post_ids = fields.One2many('marketing.post', 'marketing_product_id', string='Posts')
+    comment = fields.Text(string='Comment')
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -49,7 +51,7 @@ class FacebookPage(models.Model):
             return {'domain': {'page_ids': []}}
 
     
-    def post_to_facebook(self):
+    def post_product_to_facebook(self):
         for record in self:
             for page in record.page_ids:
                 product = record.product_id
@@ -66,7 +68,7 @@ class FacebookPage(models.Model):
                     response = requests.post(url, data=params)
                     response.raise_for_status()
                     data = response.json()
-                    self.env['marketing.product.post'].create({
+                    self.env['marketing.post'].create({
                         'marketing_product_id': record.id,
                         'page_id': page.id,
                         'post_id': data.get('id'),
@@ -74,7 +76,7 @@ class FacebookPage(models.Model):
                         'state': 'posted'
                     })
                 except requests.exceptions.RequestException as e:
-                    self.env['marketing.product.post'].create({
+                    self.env['marketing.post'].create({
                         'marketing_product_id': record.id,
                         'page_id': page.id,
                         'state': 'failed',
@@ -86,16 +88,32 @@ class FacebookPage(models.Model):
                         'type': 'danger',
                     })
 
-class MarketingProductPost(models.Model):
-    _name = 'marketing.product.post'
-    _description = 'Marketing Product Post'
+    def post_comment_to_facebook(self):
+        for record in self:
+            comment_content = record.comment
 
-    marketing_product_id = fields.Many2one('marketing.product', string='Marketing Product')
-    page_id = fields.Many2one('facebook.page', string='Facebook Page')
-    post_id = fields.Char('Post ID')
-    post_url = fields.Char('Post URL')
-    state = fields.Selection([
-        ('posted', 'Posted'),
-        ('failed', 'Failed')
-    ], string='Status', default='posted')
-    error_message = fields.Text('Error Message')
+            for page in record.page:
+                page_id = page.page_id
+                access_token = page.access_token
+
+                # Lọc các bài post chỉ thuộc về trang hiện tại
+                page_post_lines = record.facebook_post_line.filtered(lambda line: line.post_id.startswith(page_id))
+
+                for post_line in page_post_lines:
+                    post_id = post_line.post_id
+
+                    # _logger.info(f"Posting comment to Facebook post '{post_id}' on page '{page_id}' using access token '{access_token}'")
+
+                    try:
+                        response = requests.post(
+                            f'https://graph.facebook.com/{post_id}/comments',
+                            data={
+                                'message': comment_content,
+                                'access_token': access_token
+                            }
+                        )
+                        response.raise_for_status()
+                        logger.info(f"Successfully posted comment to post '{post_id}' on page '{page_id}'")
+                    except requests.exceptions.RequestException as e:
+                        logger.error(f"Failed to post comment to post '{post_id}' on page '{page_id}': {e}")
+

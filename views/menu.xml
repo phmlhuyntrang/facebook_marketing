@@ -31,12 +31,26 @@
         sequence="0"
     />
 
+    <menuitem
+        id="menu_marketing_root"
+        name="Marketing Posts"
+        parent="menu_root"
+        sequence="0"
+    />
+
     <menuitem 
         id="menu_marketing_product"
         name="Marketing Products"
         action="action_marketing_product" 
-        parent="menu_root"  
+        parent="menu_marketing_root"  
         sequence="0"
     />
 
+     <menuitem
+        id="menu_marketing_blog"
+        name="Marketing Blogs"
+        action="action_marketing_blog"
+        parent="menu_marketing_root"
+        sequence="0"
+    />
 </odoo>

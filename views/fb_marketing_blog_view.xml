@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_marketing_product_form" model="ir.ui.view">
-        <field name="name">marketing.product.form</field>
-        <field name="model">marketing.product</field>
+    <record id="view_marketing_blog_form" model="ir.ui.view">
+        <field name="name">marketing.blog.form</field>
+        <field name="model">marketing.blog</field>
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="post_product_to_facebook" string="Post to Facebook" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="post_blog_to_facebook" string="Post to Facebook" type="object" class="oe_highlight" invisible="state != 'draft'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
-                        <field name="product_id" options="{'no_create': True}"/>
+                        <field name="blog" options="{'no_create': True}"/>
                         <field name="account_ids" widget="many2many_tags" options="{'no_create': True}"/>
                         <field name="page_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('account_id', 'in', account_ids)]"/>
                         <field name="message"/>
@@ -36,14 +36,15 @@
         </field>
     </record>
 
-    <record id="view_marketing_product_tree" model="ir.ui.view">
-        <field name="name">marketing.product.tree</field>
-        <field name="model">marketing.product</field>
+
+    <record id="view_marketing_post_tree" model="ir.ui.view">
+        <field name="name">marketing.blog.tree</field>
+        <field name="model">marketing.blog</field>
         <field name="arch" type="xml">
-            <tree>
-                <field name="account_ids" widget="many2many_tags"/>
-                <field name="page_ids" widget="many2many_tags"/>
-                <field name="product_id"/>
+            <tree string="Marketing Blogs">
+                <field name="account_ids"  widget="many2many_tags"/>
+                <field name="page_ids"  widget="many2many_tags"/>
+                <field name="blog"/>
                 <field name="schedule_post"/>
                 <field name="remind_time"/>
                 <field name="state"/>
@@ -51,25 +52,25 @@
         </field>
     </record>
 
-    <record id="action_marketing_product" model="ir.actions.act_window">
-        <field name="name">Marketing Products</field>
-        <field name="res_model">marketing.product</field>
+    <record id="action_marketing_blog" model="ir.actions.act_window">
+        <field name="name">Marketing Blogs</field>
+        <field name="res_model">marketing.blog</field>
         <field name="view_mode">tree,form</field>
     </record>
 
     <data noupdate="0">
-        <!-- Rule for Marketing Product Post -->
-        <record id="marketing_product_post_rule" model="ir.rule">
-            <field name="name">Marketing Product Post Rule</field>
-            <field name="model_id" ref="model_marketing_product"/>
+        <!-- Rule for Marketing Blog Post -->
+        <record id="marketing_blog_post_rule" model="ir.rule">
+            <field name="name">Marketing Blog Post Rule</field>
+            <field name="model_id" ref="model_marketing_blog"/>
             <field name="domain_force">[(1, '=', 1)]</field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
-        <!-- Access rights for Marketing Product Post -->
-        <record id="access_marketing_product_post_user" model="ir.model.access">
+        <!-- Access rights for Marketing Blog Post -->
+        <record id="access_marketing_blog_post_user" model="ir.model.access">
             <field name="name">marketing.post user</field>
-            <field name="model_id" ref="model_marketing_product"/>
+            <field name="model_id" ref="model_marketing_blog"/>
             <field name="group_id" ref="base.group_user"/>
             <field name="perm_read" eval="1"/>
             <field name="perm_write" eval="1"/>

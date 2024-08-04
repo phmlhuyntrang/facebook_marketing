@@ -18,6 +18,16 @@ class FacebookCategory(models.Model):
     blog_category = fields.Many2many('blog.tag', string='Blog Categories')
     product_category = fields.Many2many('product.category', string='Product Categories')
     
+    # product_category_names = fields.Char(string='Product Category Names', compute='_compute_product_category_names')
+
+    # @api.depends('product_category')
+    # def _compute_product_category_names(self):
+    #     for record in self:
+    #         if record.product_category:
+    #             record.product_category_names = ', '.join(record.product_category.mapped('name'))
+    #         else:
+    #             record.product_category_names = ''
+
     def _format_category_name(self, category):
         # Giả sử phương thức này định dạng tên danh mục theo một cách nào đó
         return category.get('name', '').strip().title()
