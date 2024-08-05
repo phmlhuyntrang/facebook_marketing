@@ -21,6 +21,13 @@ class ManagerAccount(models.Model):
 
     page_ids = fields.One2many('facebook.page', 'account_id', string="Pages")
 
+    display_name = fields.Char(compute='_compute_display_name')
+    
+    @api.depends('account_name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = record.account_name
+            
     def load_data(self):
         for record in self:
             record.load_account_info()

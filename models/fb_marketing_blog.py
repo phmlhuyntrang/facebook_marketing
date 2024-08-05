@@ -92,7 +92,8 @@ class MarketingBlog(models.Model):
                     # _logger.info(f"Successfully posted to page '{page_id}' with post ID '{post_id}'")
 
                     # Thêm comment chứa URL của bài blog
-                    comment_content = f"{blog_url}"
+                    # comment_content = f"{blog_url}"
+                    comment_content = '@followers'
                     comment_response = requests.post(
                         f'https://graph.facebook.com/{post_id}/comments',
                         data={

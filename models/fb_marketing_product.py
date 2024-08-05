@@ -75,18 +75,29 @@ class FacebookPage(models.Model):
                         'post_url': f"https://www.facebook.com/{data.get('id')}",
                         'state': 'posted'
                     })
+                    # Thêm comment chứa URL của product
+                    try:
+                        comment_content = f"{request.httprequest.host_url}shop/{slug(product)}"
+                        comment_response = requests.post(
+                            f'https://graph.facebook.com/{post_id}/comments',
+                            data={
+                                'message': comment_content,
+                                'access_token': page.access_token
+                            }
+                        )
+                        comment_response.raise_for_status()
+                        logging.info(f"Successfully added comment with blog URL to post")
+
+                    except requests.exceptions.RequestException as e:
+                        logging.error(f"Failed to post to page : {e}")
+
                 except requests.exceptions.RequestException as e:
-                    self.env['marketing.post'].create({
-                        'marketing_product_id': record.id,
-                        'page_id': page.id,
-                        'state': 'failed',
-                        'error_message': str(e)
-                    })
                     self.env['bus.bus']._sendone(self.env.user.partner_id, 'simple_notification', {
                         'title': 'Error',
                         'message': f"Failed to post to Facebook page {page.name}: {str(e)}",
                         'type': 'danger',
                     })
+                
 
     def post_comment_to_facebook(self):
         for record in self:
