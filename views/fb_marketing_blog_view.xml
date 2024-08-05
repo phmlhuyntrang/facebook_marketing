@@ -6,15 +6,16 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="post_blog_to_facebook" string="Post to Facebook" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="post_blog_to_facebook" string="Post to Facebook" type="object" class="oe_highlight"/>
+                    <button name="post_comment_to_facebook" type="object" string="Post Comment"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
                         <field name="blog" options="{'no_create': True}"/>
-                        <field name="account_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                        <field name="page_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('account_id', 'in', account_ids)]"/>
-                        <field name="message"/>
+                        <field name="blog_title"/>
+                        <field name="account_ids" widget="many2many_tags" options="{'no_create': True, 'field': 'name'}"/>
+                        <field name="page_ids" widget="many2many_tags" options="{'no_create': True, 'field': 'page_name'}" domain="[('account_id', 'in', account_ids)]"/>
                         <field name="comment"/>
                         <field name="schedule_post"/>
                         <field name="remind_time"/>

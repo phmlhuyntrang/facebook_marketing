@@ -7,9 +7,9 @@ class FacebookPage(models.Model):
 
     # _inherit = ['mail.thread', 'mail.activity.mixin']
 
+    page_name = fields.Char(string="Name")
     account_id = fields.Many2one('manager.account', string='Account')
     page_avatar = fields.Binary('Avatar')
-    page_name = fields.Char(string="Name")
     page_id = fields.Char(string="Page ID")
     access_token = fields.Char(string="Access Token")
     category = fields.Char(string="Main Category")
@@ -17,9 +17,13 @@ class FacebookPage(models.Model):
                                     relation='facebook_page_category_rel',
                                     column1='page_id', column2='category_id')
     
-   
     is_favorite = fields.Boolean(string="Favorite", default=False, tracking=True)
+    display_name = fields.Char(compute='_compute_display_name')
 
+    @api.depends('page_name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = record.page_name
    
     def toggle_favorite(self):
         for record in self:

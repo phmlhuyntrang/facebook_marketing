@@ -14,12 +14,17 @@ class ManagerAccount(models.Model):
     # Thêm trường này
     is_favorite = fields.Boolean(string="Favorite", default=False, tracking=True)
     
+    account_name = fields.Char('User Name')
     account_id = fields.Char(string='Account ID', required=True)
     access_token = fields.Text('Access Token', required=True)
-    account_name = fields.Char('User Name')
     account_avatar = fields.Binary('Avatar')
-
     page_ids = fields.One2many('facebook.page', 'account_id', string="Pages")
+    display_name = fields.Char(compute='_compute_display_name')
+
+    @api.depends('account_name')
+    def _compute_display_name(self):
+        for record in self:
+            record.display_name = record.account_name
 
     def load_data(self):
         for record in self:

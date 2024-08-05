@@ -1,5 +1,6 @@
 import logging
 import requests
+import base64
 from odoo import models, fields, api
 
 _logger = logging.getLogger(__name__)
@@ -9,13 +10,13 @@ class MarketingBlog(models.Model):
     _description = 'Marketing Blog'
 
     blog = fields.Many2one('blog.post', string='Blog', required=True)
+    blog_title = fields.Text(string='Blog content')
 
     account_ids = fields.Many2many('manager.account', string='Account', required=True)
     page_ids = fields.Many2many('facebook.page', string='Page', required=True)
-    
-    message = fields.Text(string='Post Message', required=True)
-    schedule_post = fields.Datetime(string='Schedule Post', required=True)
-    remind_time = fields.Datetime(string='Remind Time', required=True)
+
+    schedule_post = fields.Datetime(string='Schedule Post')
+    remind_time = fields.Datetime(string='Remind Time')
    
     post_ids = fields.One2many('marketing.post', 'marketing_blog_id', string='Posts')
     comment = fields.Text(string='Comment')
@@ -46,16 +47,21 @@ class MarketingBlog(models.Model):
             return {'domain': {'page_ids': [('account_id', 'in', self.account_ids.ids)]}}
         else:
             return {'domain': {'page_ids': []}}
+        
+    @api.onchange('blog')
+    def _onchange_blog(self):
+        if self.blog:
+            self.blog_title = self.blog.name
 
     def post_blog_to_facebook(self):
         for record in self:
             blog_name = record.blog.name
-            message = record.message
+            blog_title = record.blog_title
             blog_author = record.blog.author_id.name
             blog_url = f"{self.env['ir.config_parameter'].sudo().get_param('web.base.url')}/blog/{record.blog.blog_id.id}/post/{record.blog.id}"
 
             post_content = (
-                f"{message}\n"
+                f"{blog_title}\n"
                 f"Blog: {blog_name}\n"
                 f"Author: {blog_author}\n"
             )
@@ -64,10 +70,7 @@ class MarketingBlog(models.Model):
                 page_id = page.page_id
                 access_token = page.access_token
 
-                # _logger.info(f"Posting blog '{blog_name}' (ID: {record.blog.id}) to Facebook page '{page_id}' using access token '{access_token}'")
-
                 try:
-                    # Đăng bài viết
                     response = requests.post(
                         f'https://graph.facebook.com/{page_id}/feed',
                         data={
@@ -79,19 +82,15 @@ class MarketingBlog(models.Model):
                     post_data = response.json()
                     post_id = post_data.get('id')
                     post_url = f"https://www.facebook.com/{post_id.replace('_', '/posts/')}"
-
+                    
                     self.env['marketing.post'].create({
                         'marketing_blog_id': record.id,
                         'post_id': post_id,
                         'post_url': post_url,
                         'page_id': page.id,
                         'state': 'posted'
-
                     })
 
-                    # _logger.info(f"Successfully posted to page '{page_id}' with post ID '{post_id}'")
-
-                    # Thêm comment chứa URL của bài blog
                     comment_content = f"{blog_url}"
                     comment_response = requests.post(
                         f'https://graph.facebook.com/{post_id}/comments',
@@ -110,12 +109,11 @@ class MarketingBlog(models.Model):
         for record in self:
             comment_content = record.comment
 
-            for page in record.page:
+            for page in record.page_ids:
                 page_id = page.page_id
                 access_token = page.access_token
 
-                # Lọc các bài post chỉ thuộc về trang hiện tại
-                page_post_lines = record.facebook_post_line.filtered(lambda line: line.post_id.startswith(page_id))
+                page_post_lines = record.post_ids.filtered(lambda line: line.page_id.id == page.id)
 
                 for post_line in page_post_lines:
                     post_id = post_line.post_id
@@ -134,5 +132,3 @@ class MarketingBlog(models.Model):
                         _logger.info(f"Successfully posted comment to post '{post_id}' on page '{page_id}'")
                     except requests.exceptions.RequestException as e:
                         _logger.error(f"Failed to post comment to post '{post_id}' on page '{page_id}': {e}")
-
-
