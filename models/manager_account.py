@@ -25,7 +25,7 @@ class ManagerAccount(models.Model):
     def _compute_display_name(self):
         for record in self:
             record.display_name = record.account_name
-
+            
     def load_data(self):
         for record in self:
             record.load_account_info()
