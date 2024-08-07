@@ -10,22 +10,17 @@
                        
                         <field name="account_ids" widget="many2one_tags" options="{'no_create': True, 'field': 'name'}"/>
                         <field name="page_id" widget="many2one_tags" options="{'no_create': True, 'field': 'page_name'}" domain="[('account_id', '=', account_ids)]"/>
-
-                        <field name="comment"/>
                         <field name="schedule_post"/>
-                        <field name="remind_time"/>
                         <field name="post_id"/>
                         <field name="post_url"/>
                         <field name="state"/>
+                        <field name="comment_suggestion_id" options="{'no_create': True}"/>
+                        <field name="comment"/>
+                        <field name="remind_time"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="action_marketing_post" model="ir.actions.act_window">
-        <field name="name">Marketing Posts</field>
-        <field name="res_model">marketing.post.blog</field>
-        <field name="view_mode">form</field>
-    </record>
 </odoo>

@@ -43,6 +43,7 @@
         'views/fb_marketing_blog_view.xml',
         'views/res_config_settings_views.xml',
         'views/fb_marketing_post_view.xml',
+        'views/fb_marketing_comment_view.xml',
         'views/menu.xml',
     ],
 

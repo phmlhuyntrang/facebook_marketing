@@ -1,4 +1,3 @@
-
 import logging
 import requests
 from odoo import models, fields, api
@@ -15,6 +14,9 @@ class MarketingBlog(models.Model):
     page_ids = fields.Many2many('facebook.page', string='Page')
     post_ids = fields.One2many('marketing.post.blog', 'marketing_blog_id', string='Posts')
     comment = fields.Text(string='Comment')
+    image = fields.Binary(string='Image')
+    link = fields.Char(string='Link')
+    include_link = fields.Boolean(string='Include Link in Post', default=True)
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -39,3 +41,4 @@ class MarketingBlog(models.Model):
     def _onchange_blog(self):
         if self.blog:
             self.blog_title = self.blog.name
+            self.link = f"{self.env['ir.config_parameter'].sudo().get_param('web.base.url')}/blog/{self.blog.blog_id.id}/post/{self.blog.id}"

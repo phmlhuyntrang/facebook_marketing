@@ -53,4 +53,10 @@
         parent="menu_marketing_root"
         sequence="0"
     />
+     <menuitem 
+        id="menu_marketing_comment" 
+        name="Comments"
+        action="action_marketing_comment" 
+        parent="menu_root" 
+        sequence="10"/>
 </odoo>

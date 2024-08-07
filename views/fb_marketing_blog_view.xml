@@ -12,8 +12,9 @@
                     <group>
                         <field name="blog" options="{'no_create': True}"/>
                         <field name="blog_title"/>
-                        <!-- <field name="account_ids" widget="many2many_tags" options="{'no_create': True, 'field': 'name'}"/>
-                        <field name="page_ids" widget="many2many_tags" options="{'no_create': True, 'field': 'page_name'}" domain="[('account_id', 'in', account_ids)]"/> -->
+                        <field name="image" widget="image"/>
+                        <field name="link"/>
+                        <field name="include_link"/>
                     </group>
                     <notebook style="width:3000px;">
                         <page string="Posts">
@@ -44,7 +45,7 @@
         <field name="model">marketing.blog</field>
         <field name="arch" type="xml">
             <tree string="Marketing Blogs">
-                <field name="account_ids"  widget="many2many_tags"/>
+                <!-- <field name="account_ids"  widget="many2many_tags"/> -->
                 <!-- <field name="page_ids"  widget="many2many_tags"/> -->
                 <field name="blog"/>
                 <field name="state"/>
