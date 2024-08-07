@@ -5,8 +5,6 @@ class FacebookPage(models.Model):
     _name = 'facebook.page'
     _description = 'Facebook Page'
 
-    # _inherit = ['mail.thread', 'mail.activity.mixin']
-
     account_id = fields.Many2one('manager.account', string='Account')
     page_avatar = fields.Binary('Avatar')
     page_name = fields.Char(string="Name")

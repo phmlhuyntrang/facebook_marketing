@@ -6,27 +6,28 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="post_product_to_facebook" string="Post to Facebook" type="object" class="oe_highlight" invisible="state != 'draft'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
                         <field name="product_id" options="{'no_create': True}"/>
-                        <field name="account_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                        <field name="page_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('account_id', 'in', account_ids)]"/>
-                        <field name="message"/>
-                        <field name="comment"/>
-                        <field name="schedule_post"/>
-                        <field name="remind_time"/>
+                        <field name="product_name" readonly="0"/>
+                        <field name="product_image" widget="image" class="oe_avatar" readonly="0"/>
+                        <field name="show_product_url" />
+                        <field name="product_url" readonly="1" invisible="not show_product_url"/>
                     </group>
                     <notebook>
                         <page string="Posts">
-                            <field name="post_ids" readonly="1">
+                            <field name="post_ids">
                                 <tree>
-                                    <field name="page_id"/>
-                                    <field name="post_id"/>
-                                    <field name="post_url" widget="url"/>
-                                    <field name="state"/>
+                                    <field name="account_id" widget="many2many_tags"/>
+                                    <field name="page_id" widget="many2many_tags"/>
+                                    <field name="schedule_post"/>
+                                    <field name="comment"/>
+                                    <field name="remind_time"/>
+                                    <field name="post_id" />
+                                    <field name="post_url" widget="url" />
+                                    <field name="state" />
                                 </tree>
                             </field>
                         </page>
@@ -41,11 +42,9 @@
         <field name="model">marketing.product</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="account_ids" widget="many2many_tags"/>
-                <field name="page_ids" widget="many2many_tags"/>
-                <field name="product_id"/>
-                <field name="schedule_post"/>
-                <field name="remind_time"/>
+                <!-- <field name="account_ids"  widget="many2many_tags"/>
+                <field name="page_ids"  widget="many2many_tags"/> -->
+                <field name="post_ids"/>
                 <field name="state"/>
             </tree>
         </field>
