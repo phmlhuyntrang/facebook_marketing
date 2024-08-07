@@ -6,8 +6,8 @@ import requests
 _logger = logging.getLogger(__name__)
 
 class MarketingPost(models.Model):
-    _name = 'marketing.post.blog'
-    _description = 'Marketing Post Blog'
+    _name = 'marketing.post'
+    _description = 'Marketing Post'
 
     marketing_blog_id = fields.Many2one('marketing.blog', string='Marketing Blog')
     account_ids = fields.Many2one('manager.account', string='Account', required=True)

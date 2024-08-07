@@ -23,12 +23,6 @@
         </field>
     </record>
 
-    <record id="action_marketing_post" model="ir.actions.act_window">
-        <field name="name">Marketing Posts</field>
-        <field name="res_model">marketing.post.blog</field>
-        <field name="view_mode">form</field>
-    </record>
-
     <!-- form product post -->
     <record id="view_marketing_product_post_form" model="ir.ui.view">
         <field name="name">marketing.product.post.form</field>
@@ -59,4 +53,5 @@
             </form>
         </field>
     </record>
+
 </odoo>

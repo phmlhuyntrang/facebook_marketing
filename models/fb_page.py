@@ -17,13 +17,14 @@ class FacebookPage(models.Model):
     
    
     is_favorite = fields.Boolean(string="Favorite", default=False, tracking=True)
+
     display_name = fields.Char(compute='_compute_display_name')
-    
+
     @api.depends('page_name')
     def _compute_display_name(self):
         for record in self:
             record.display_name = record.page_name
-   
+
     def toggle_favorite(self):
         for record in self:
             record.is_favorite = not record.is_favorite
