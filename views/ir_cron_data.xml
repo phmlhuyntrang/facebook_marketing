@@ -1,0 +1,16 @@
+<!-- kiểm tra các bài viết đã được lên lịch và đăng chúng khi đến thời gian đã định. -->
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_post_scheduled_blogs" model="ir.cron">
+            <field name="name">Post Scheduled Blogs</field>
+            <field name="model_id" ref="model_marketing_post_blog"/>
+            <field name="state">code</field>
+            <field name="code">model._post_scheduled_blogs()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>
