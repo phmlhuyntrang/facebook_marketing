@@ -13,7 +13,7 @@ class MarketingBlog(models.Model):
     blog_title = fields.Text(string='Blog content')
     account_ids = fields.Many2many('manager.account', string='Account', required=True)
     page_ids = fields.Many2many('facebook.page', string='Page')
-    post_ids = fields.One2many('marketing.post.blog', 'marketing_blog_id', string='Posts')
+    post_ids = fields.One2many('marketing.post', 'marketing_blog_id', string='Posts')
     comment = fields.Text(string='Comment')
     image = fields.Binary(string='Image')
     link = fields.Char(string='Link')

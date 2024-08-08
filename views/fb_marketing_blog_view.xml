@@ -13,7 +13,7 @@
                         <field name="blog" options="{'no_create': True}"/>
                         <field name="blog_title"/>
                         <field name="image" widget="image"/>
-                        <field name="link"/>
+                        <field name="link" readonly="1"/>
                         <field name="include_link"/>
                     </group>
                     <notebook style="width:3000px;">
@@ -21,7 +21,6 @@
                             <field name="post_ids">
                                 <tree>
                                     <field name="page_id"/>
-                                    <!-- <field name="facebook_account_name"/> -->
                                     <field name="comment"/>
                                     <field name="schedule_post"/>
                                     <field name="remind_time"/>
@@ -61,7 +60,7 @@
 
     <data noupdate="0">
         <!-- Rule for Marketing Blog Post -->
-        <record id="marketing_blog_post_rule" model="ir.rule">
+        <record id="marketing_post_rule" model="ir.rule">
             <field name="name">Marketing Blog Post Rule</field>
             <field name="model_id" ref="model_marketing_blog"/>
             <field name="domain_force">[(1, '=', 1)]</field>
@@ -69,8 +68,8 @@
         </record>
 
         <!-- Access rights for Marketing Blog Post -->
-        <record id="access_marketing_blog_post_user" model="ir.model.access">
-            <field name="name">marketing.post.blog user</field>
+        <record id="access_marketing_post_user" model="ir.model.access">
+            <field name="name">marketing.post user</field>
             <field name="model_id" ref="model_marketing_blog"/>
             <field name="group_id" ref="base.group_user"/>
             <field name="perm_read" eval="1"/>

@@ -48,6 +48,7 @@
         'views/fb_marketing_product_view.xml',
 
         'views/res_config_settings_views.xml',
+        'views/ir_cron_data.xml',
         'views/menu.xml',
     ],
 

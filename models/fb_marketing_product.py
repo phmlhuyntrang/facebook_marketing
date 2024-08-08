@@ -13,10 +13,10 @@ class MarketingProduct(models.Model):
     product_id = fields.Many2one('product.template', string='Product', required=True)
     product_image = fields.Image(related='product_id.image_1920', string='Product Image')
     product_name = fields.Char(related='product_id.name', string='Product Name')
-    product_url = fields.Char(string='Product Link', compute='_compute_product_url', store=True)
-    show_product_url = fields.Boolean(string="Show Product URL", default=True)
+    product_url = fields.Char(string='Link', compute='_compute_product_url', store=True)
+    show_product_url = fields.Boolean(string="Include Link in Post", default=True)
 
-    post_ids = fields.One2many('marketing.product.post', 'marketing_product_id', string='Posts')
+    post_ids = fields.One2many('marketing.post', 'marketing_product_id', string='Posts')
     
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -36,10 +36,10 @@ class MarketingProduct(models.Model):
     @api.depends('post_ids.state')
     def _compute_state(self):
         for record in self:
-            post_states = record.post_ids.mapped('state')
+            post_states = set(record.post_ids.mapped('state'))
             if not post_states:
                 record.state = 'draft'
-            elif all(state == 'posted' for state in post_states):
+            elif post_states == {'posted'}:
                 record.state = 'posted'
             elif 'failed' in post_states:
                 record.state = 'failed'

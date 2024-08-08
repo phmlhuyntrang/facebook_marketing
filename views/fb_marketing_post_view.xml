@@ -1,50 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="view_marketing_post_form" model="ir.ui.view">
-        <field name="name">marketing.post.blog.form</field>
-        <field name="model">marketing.post.blog</field>
-        <field name="arch" type="xml">
-            <form string="Marketing Post">
-                <sheet>
-                    <group>
-                       
-                        <field name="account_ids" widget="many2one_tags" options="{'no_create': True, 'field': 'name'}"/>
-                        <field name="page_id" widget="many2one_tags" options="{'no_create': True, 'field': 'page_name'}" domain="[('account_id', '=', account_ids)]"/>
-
-                        <field name="comment"/>
-                        <field name="schedule_post"/>
-                        <field name="remind_time"/>
-                        <field name="post_id"/>
-                        <field name="post_url"/>
-                        <field name="state"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- form product post -->
-    <record id="view_marketing_product_post_form" model="ir.ui.view">
-        <field name="name">marketing.product.post.form</field>
-        <field name="model">marketing.product.post</field>
+        <field name="name">marketing.post.form</field>
+        <field name="model">marketing.post</field>
         <field name="arch" type="xml">
             <form>
+                <style>
+                    .custom_group .o_horizontal_separator {
+                        color: #71639E;
+                        font-weight: bold;
+                    }
+                </style>
                 <header>
-                    <button name="post_product_to_facebook" string="Post to Facebook" type="object" class="oe_highlight"/>
-                    <button name="post_comment_to_facebook" type="object" string="Post Comment" class="oe_highlight"/>
+                    <!-- <button name="post_product_to_facebook" string="Post to Facebook" type="object" class="oe_highlight"/>
+                    <button name="post_comment_to_facebook" type="object" string="Post Comment" class="oe_highlight"/> -->
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
-                    <group string="Account &amp; Page">
+                    <group string="Account &amp; Page" class="custom_group">
                         <field name="account_id" options="{'no_create': True}"/>
                         <field name="page_id" options="{'no_create': True}" domain="[('account_id', '=', account_id)]"/>
                         <field name="schedule_post"/>
                     </group>
-                    <group string="Comment">
+                    <group string="Comment" class="custom_group">
+                        <field name="comment_suggestion_id" readonly="0"/>
                         <field name="comment"/>
                         <field name="remind_time"/>
                     </group>
-                    <group string="Post">
+                    <group string="Post" class="custom_group">
                         <field name="post_id" readonly="1"/>
                         <field name="post_url" widget="url" readonly="1"/>
                         <field name="state" readonly="1"/>
@@ -53,5 +36,4 @@
             </form>
         </field>
     </record>
-
 </odoo>
