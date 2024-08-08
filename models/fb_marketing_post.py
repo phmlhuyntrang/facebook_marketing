@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from datetime import datetime
+from datetime import datetime, timedelta
 import base64
 import logging
 import requests
@@ -20,7 +20,13 @@ class MarketingPost(models.Model):
 
     comment = fields.Text(string='Comment')
     comment_suggestion_id = fields.Many2one('marketing.comment', string='Comment Suggestion')
-    remind_time = fields.Datetime(string='Remind Time')
+    remind_time = fields.Selection([
+        ('1', '1 minute'),
+        ('2', '2 minutes'),
+        ('3', '3 minutes'),
+        ('4', '4 minutes'),
+        ('5', '5 minutes'),
+    ], string='Remind Time', default='')
     
     post_id = fields.Char('Post ID')
     post_url = fields.Char('Post URL')
@@ -30,6 +36,12 @@ class MarketingPost(models.Model):
         ('posted', 'Posted'),
         ('failed', 'Failed')
     ], string='Status', default='draft')
+    last_auto_comment_time = fields.Datetime('Last Auto Comment Time')
+
+    @api.model
+    def run_auto_comment_cron(self):
+        _logger.info("Chạy cron job auto-comment")
+        self._auto_comment()
 
     @api.onchange('account_id')
     def _onchange_account_id(self):
@@ -78,6 +90,7 @@ class MarketingPost(models.Model):
 
             if record.marketing_blog_id.include_link:
                 post_content += f"\nTìm hiểu thêm: {blog_url}"
+                _logger.info("-------------blog url:'{blog_url}'")
 
             try:
                 data = {
@@ -178,6 +191,19 @@ class MarketingPost(models.Model):
                 record.state = 'failed'
                 _logger.error(f"Failed to post to page '{record.page_id.page_id}' or add comment: {e}")
                 _logger.debug(f"Response content: {e.response.content if e.response else 'No response content'}")
+    
+    def _post_scheduled_product(self):
+        current_time = datetime.now()
+        _logger.info(f"Checking for scheduled posts at {current_time}")
+        scheduled_posts = self.search([('schedule_post', '<=', current_time), ('state', '=', 'scheduled')])
+        _logger.info(f"Found {len(scheduled_posts)} scheduled posts to process")
+        for post in scheduled_posts:
+            _logger.info(f"Attempting to post product with ID {post.id}")
+            post.post_product_to_facebook()
+            if post.state == 'posted':
+                _logger.info(f"Successfully posted product with ID {post.id}")
+            else:
+                _logger.error(f"Failed to post product with ID {post.id}")
 
     def post_comment_to_facebook(self):
         for record in self:
@@ -214,3 +240,44 @@ class MarketingPost(models.Model):
                 except requests.exceptions.RequestException as e:
                     _logger.error(f"Failed to post comment to post '{record.post_id}' on page '{record.page_id.page_id}': {e}")
                     next_page = False
+
+    def _auto_comment(self):
+        current_time = datetime.now()
+        _logger.info(f"Chạy kiểm tra auto-comment lúc {current_time}")
+        posts_to_comment = self.search([
+            ('state', '=', 'posted'),
+            ('post_id', '!=', False),
+            '|', ('last_auto_comment_time', '=', False),
+            ('last_auto_comment_time', '<=', current_time - timedelta(minutes=1))
+        ])
+        
+        _logger.info(f"Tìm thấy {len(posts_to_comment)} bài viết cần comment")
+
+        for post in posts_to_comment:
+            _logger.info(f"Kiểm tra bài viết ID {post.post_id} với thời gian nhắc nhở {post.remind_time} phút")
+            if not post.last_auto_comment_time or (current_time - post.last_auto_comment_time).total_seconds() / 60 >= int(post.remind_time):
+                _logger.info(f"Đang đăng auto-comment cho bài viết ID {post.post_id}")
+                post.post_comment_to_facebook()
+                post.last_auto_comment_time = current_time
+                _logger.info(f"Thời gian auto-comment được cập nhật cho bài viết ID {post.post_id} là {post.last_auto_comment_time}")
+
+    def post_random_comment_to_facebook(self):
+        self.ensure_one()
+        comment_content = self.comment
+
+        if not comment_content or not comment_content.strip():
+            _logger.warning(f"Nội dung comment trống hoặc chỉ chứa khoảng trắng cho bài viết '{self.post_id}', bỏ qua.")
+            return
+
+        try:
+            response = requests.post(
+                f'https://graph.facebook.com/{self.post_id}/comments',
+                data={
+                    'message': comment_content,
+                    'access_token': self.page_id.access_token
+                }
+            )
+            response.raise_for_status()
+            _logger.info(f"Đăng auto-comment thành công cho bài viết '{self.post_id}' trên trang '{self.page_id.page_id}' với nội dung: {comment_content}")
+        except requests.exceptions.RequestException as e:
+            _logger.error(f"Đăng auto-comment thất bại cho bài viết '{self.post_id}' trên trang '{self.page_id.page_id}' với nội dung: {comment_content}. Lỗi: {e}")
