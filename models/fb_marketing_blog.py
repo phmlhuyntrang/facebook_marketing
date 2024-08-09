@@ -42,5 +42,4 @@ class MarketingBlog(models.Model):
     def _onchange_blog(self):
         if self.blog:
             self.blog_title = self.blog.name
-            temp = f"{self.env['ir.config_parameter'].sudo().get_param('web.base.url')}/blog/{self.blog.blog_id.id}/post/{self.blog.id}"
-            self.link = temp
+            self.link = f"{self.env['ir.config_parameter'].sudo().get_param('web.base.url')}/blog/{self.blog.blog_id.id}/post/{self.blog.id}"

@@ -12,8 +12,6 @@
                     }
                 </style>
                 <header>
-                    <!-- <button name="post_product_to_facebook" string="Post to Facebook" type="object" class="oe_highlight"/>
-                    <button name="post_comment_to_facebook" type="object" string="Post Comment" class="oe_highlight"/> -->
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -26,6 +24,8 @@
                         <field name="comment_suggestion_id" readonly="0"/>
                         <field name="comment"/>
                         <field name="remind_time"/>
+                        <field name="start_auto_comment"/>
+                        <field name="end_auto_comment"/>
                     </group>
                     <group string="Post" class="custom_group">
                         <field name="post_id" readonly="1"/>

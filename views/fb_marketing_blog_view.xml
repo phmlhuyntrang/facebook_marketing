@@ -13,7 +13,7 @@
                         <field name="blog" options="{'no_create': True}"/>
                         <field name="blog_title"/>
                         <field name="image" widget="image"/>
-                        <!-- <field name="link" readonly="1"/> -->
+                        <!-- <field name="link"/> -->
                         <field name="include_link"/>
                     </group>
                     <notebook style="width:3000px;">
@@ -31,7 +31,6 @@
                                     <button name="post_comment_to_facebook" type="object" string="Post Comment" class="oe_highlight"/>
                                 </tree>
                             </field>
-                           
                         </page>
                     </notebook>
                 </sheet>
