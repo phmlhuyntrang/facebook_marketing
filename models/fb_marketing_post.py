@@ -1,8 +1,10 @@
+import requests
 from odoo import models, fields, api
 from datetime import datetime, timedelta
 import base64
 import logging
-import requests
+from odoo.addons.http_routing.models.ir_http import slug # type: ignore
+from odoo.http import request # type: ignore
 
 _logger = logging.getLogger(__name__)
 
@@ -90,7 +92,6 @@ class MarketingPost(models.Model):
 
             if record.marketing_blog_id.include_link:
                 post_content += f"\nTìm hiểu thêm: {blog_url}"
-                _logger.info("-------------blog url:'{blog_url}'")
 
             try:
                 data = {
@@ -135,25 +136,20 @@ class MarketingPost(models.Model):
         for record in self:
             product = record.marketing_product_id.product_id
             message = record.marketing_product_id.product_name
-            product_url = record.marketing_product_id.product_url
+            product_url = f"{request.httprequest.host_url}shop/{slug(product)}"
+            logging.info(f'Product URL: {product_url}')
             image = record.marketing_product_id.product_image
-
-            post_content = message
-
-            # if record.marketing_blog_id.include_link:
-            #     post_content += f"\nTìm hiểu thêm: {blog_url}"
 
             try:
                 data = {
-                    'message': post_content,
+                    'message': message,
                     'access_token': record.page_id.access_token,
                 }
+                # Đăng bài có hình ảnh hoặc không hình ảnh
                 files = {}
                 if image:
                     image_data = base64.b64decode(image)
                     files['source'] = ('image.jpg', image_data, 'image/jpeg')
-
-                # _logger.debug(f"Posting to Facebook with data: {data} and files: {files}")
 
                     response = requests.post(
                         f'https://graph.facebook.com/{record.page_id.page_id}/photos',
@@ -165,14 +161,19 @@ class MarketingPost(models.Model):
                         f'https://graph.facebook.com/{record.page_id.page_id}/feed',
                         data=data
                     )
+                
+                response.raise_for_status()
+                post_data = response.json()
+                record.post_id = post_data.get('id')
+                record.post_url = f"https://www.facebook.com/{record.post_id.replace('_', '/posts/')}"
+
+                # Thêm comment chứa URL của product
                 if record.marketing_product_id.show_product_url:
-                    #  Thêm comment chứa URL của product
                     try:
-                        comment_content = f"{product_url}"
                         comment_response = requests.post(
                             f'https://graph.facebook.com/{record.post_id}/comments',
                             data={
-                                'message': comment_content,
+                                'message': product_url,
                                 'access_token': record.page_id.access_token
                             }
                         )
@@ -181,18 +182,16 @@ class MarketingPost(models.Model):
 
                     except requests.exceptions.RequestException as e:
                         logging.error(f"Failed to post to page : {e}")
+                    comment_response.raise_for_status()
+                    _logger.info(f"Successfully added comment with product URL to post '{record.post_id}' on page '{record.page_id.page_id}'")
+                record.state = 'posted'
 
-                response.raise_for_status()
-                post_data = response.json()
-                record.post_id = post_data.get('id')
-                record.post_url = f"https://www.facebook.com/{record.post_id.replace('_', '/posts/')}"
-                
             except requests.exceptions.RequestException as e:
                 record.state = 'failed'
                 _logger.error(f"Failed to post to page '{record.page_id.page_id}' or add comment: {e}")
                 _logger.debug(f"Response content: {e.response.content if e.response else 'No response content'}")
     
-    def _post_scheduled_product(self):
+    def _post_scheduled_products(self):
         current_time = datetime.now()
         _logger.info(f"Checking for scheduled posts at {current_time}")
         scheduled_posts = self.search([('schedule_post', '<=', current_time), ('state', '=', 'scheduled')])
@@ -204,6 +203,22 @@ class MarketingPost(models.Model):
                 _logger.info(f"Successfully posted product with ID {post.id}")
             else:
                 _logger.error(f"Failed to post product with ID {post.id}")
+    # def _post_scheduled_products(self):
+    #     current_time = datetime.now()
+    #     _logger.info(f"Checking for scheduled product posts at {current_time}")
+    #     scheduled_posts = self.search([
+    #         ('schedule_post', '<=', current_time),
+    #         ('state', '=', 'scheduled'),
+    #         ('marketing_product_id', '!=', False)
+    #     ])
+    #     _logger.info(f"Found {len(scheduled_posts)} scheduled product posts to process")
+    #     for post in scheduled_posts:
+    #         _logger.info(f"Attempting to post product with ID {post.id}")
+    #         post.post_product_to_facebook()
+    #         if post.state == 'posted':
+    #             _logger.info(f"Successfully auto posted product with ID {post.id}")
+    #         else:
+    #             _logger.error(f"Failed auto post product with ID {post.id}")
 
     def post_comment_to_facebook(self):
         for record in self:

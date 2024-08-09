@@ -13,7 +13,6 @@
                         <field name="product_id" options="{'no_create': True}"/>
                         <field name="product_name" readonly="0"/>
                         <field name="product_image" widget="image" class="oe_avatar" readonly="0"/>
-                        <field name="product_url" readonly="1" invisible="not show_product_url"/>
                         <field name="show_product_url" />
                     </group>
                     <notebook>
