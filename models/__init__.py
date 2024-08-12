@@ -4,6 +4,5 @@ from . import fb_category
 from . import fb_page
 from . import fb_marketing_comment
 from . import fb_marketing_post
-from . import fb_marketing_blog
-from . import fb_marketing_product
+from . import fb_marketing_content
 from . import res_config_settings

@@ -4,36 +4,21 @@
     <menuitem 
         id="menu_root"
         name="Facebook Marketing"
-        sequence="2"
+        sequence="0"
     />
 
     <menuitem 
-        id="menu_manager_account"
-        name="Manager Account"
+        id="menu_post" 
+        name="Manager Posts" 
+        action="action_posts"  
         parent="menu_root"
-        action="action_manager_account"
         sequence="0"
     />
 
     <menuitem 
-        id="menu_facebook_category" 
-        name="Categories Mapping" 
-        action="action_facebook_category" 
-        parent="menu_root"  
-        sequence="0"
-    />
-
-    <menuitem 
-        id="menu_facebook_page" 
-        name="Facebook Page" 
-        action="action_facebook_page" 
-        parent="menu_root"  
-        sequence="0"
-    />
-
-    <menuitem
-        id="menu_marketing_root"
-        name="Marketing Posts"
+        id="menu_marketing_content" 
+        name="Marketing Contents" 
+        action="action_marketing_content"  
         parent="menu_root"
         sequence="0"
     />
@@ -42,7 +27,7 @@
         id="menu_marketing_product"
         name="Marketing Products"
         action="action_marketing_product" 
-        parent="menu_marketing_root"  
+        parent="menu_root"
         sequence="0"
     />
 
@@ -50,13 +35,45 @@
         id="menu_marketing_blog"
         name="Marketing Blogs"
         action="action_marketing_blog"
-        parent="menu_marketing_root"
+        parent="menu_root"
         sequence="0"
     />
-     <menuitem 
+
+    <menuitem 
+        id="menu_config" 
+        name="Configuration" 
+        parent="menu_root"
+        sequence="0"
+    />
+    <menuitem 
+        id="menu_manager_account"
+        name="Manager Account"
+        parent="menu_config"
+        action="action_manager_account"
+        sequence="0"
+    />
+
+    <menuitem 
+        id="menu_facebook_page" 
+        name="Manager Page" 
+        action="action_facebook_page" 
+        parent="menu_config"  
+        sequence="0"
+    />
+
+    <menuitem 
+        id="menu_facebook_category" 
+        name="Categories Mapping" 
+        action="action_facebook_category" 
+        parent="menu_config"  
+        sequence="0"
+    />
+
+    <menuitem 
         id="menu_marketing_comment" 
-        name="Comments"
+        name="Manager Comments"
         action="action_marketing_comment" 
-        parent="menu_root" 
-        sequence="10"/>
+        parent="menu_config" 
+        sequence="0"
+    />
 </odoo>

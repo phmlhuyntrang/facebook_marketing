@@ -9,7 +9,7 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="toggle_favorite" type="object" class="oe_stat_button" icon="fa-star">
+                        <button name="toggle_favorite" type="object" class="oe_stat_button">
                             <field name="is_favorite" widget="boolean_favorite"/>
                         </button>
                     </div>

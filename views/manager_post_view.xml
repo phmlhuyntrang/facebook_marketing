@@ -1,21 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_marketing_content_blog_form" model="ir.ui.view">
-        <field name="name">marketing.content.blog.form</field>
+    <record id="view_post_form" model="ir.ui.view">
+        <field name="name">marketing.post.form</field>
         <field name="model">marketing.content</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
                     <group>
-                        <field name="blog" options="{'no_create': True}"/>
-                        <field name="content"/>
-                        <field name="image" widget="image"/>
+                       <field name="blog" readonly="1"/>
+                       <field name="product" readonly="1"/>
+                        <field name="content" readonly="1"/>
+                        <field name="image" widget="image" readonly="1"/>
                     </group>
                     <notebook>
                         <page string="Posts">
                             <field name="post">
                                 <tree>
-                                    <field name="page_id"/>
+                                    <field name="page_id" readonly="1"/>
                                     <field name="comment"/>
                                     <field name="schedule_post"/>
                                     <field name="remind_time"/>
@@ -32,15 +33,22 @@
             </form>
         </field>
     </record>
+    
+    <record id="view_post_tree" model="ir.ui.view">
+        <field name="name">marketing.content.tree</field>
+        <field name="model">marketing.content</field>
+        <field name="arch" type="xml">
+            <tree string="Posts">
+                <field name="content"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
 
-    <record id="action_marketing_blog" model="ir.actions.act_window">
-        <field name="name">Blog Marketing Content</field>
+    <record id="action_posts" model="ir.actions.act_window">
+        <field name="name">Manager Posts</field>
         <field name="res_model">marketing.content</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_marketing_content_blog_form"/>
-        <field name="domain">[('type', '=', 'blog')]</field>
-        <field name="context">{'default_type': 'blog'}</field>
     </record>
 
 </odoo>
-

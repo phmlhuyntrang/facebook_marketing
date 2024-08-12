@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_marketing_content_blog_form" model="ir.ui.view">
-        <field name="name">marketing.content.blog.form</field>
+    <record id="view_marketing_content_general_form" model="ir.ui.view">
+        <field name="name">marketing.content.general.form</field>
         <field name="model">marketing.content</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
                     <group>
-                        <field name="blog" options="{'no_create': True}"/>
                         <field name="content"/>
                         <field name="image" widget="image"/>
                     </group>
@@ -33,14 +32,11 @@
         </field>
     </record>
 
-    <record id="action_marketing_blog" model="ir.actions.act_window">
-        <field name="name">Blog Marketing Content</field>
+    <record id="action_marketing_content" model="ir.actions.act_window">
+        <field name="name">Marketing Content</field>
         <field name="res_model">marketing.content</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_marketing_content_blog_form"/>
-        <field name="domain">[('type', '=', 'blog')]</field>
-        <field name="context">{'default_type': 'blog'}</field>
+        <field name="view_id" ref="view_marketing_content_general_form"/>
     </record>
 
 </odoo>
-

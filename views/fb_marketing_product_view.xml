@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_marketing_product_form" model="ir.ui.view">
-        <field name="name">marketing.product.form</field>
-        <field name="model">marketing.product</field>
+    <record id="view_marketing_content_product_form" model="ir.ui.view">
+        <field name="name">marketing.content.product.form</field>
+        <field name="model">marketing.content</field>
         <field name="arch" type="xml">
             <form>
-                <header>
-                    <field name="state" widget="statusbar"/>
-                </header>
                 <sheet>
                     <group>
-                        <field name="product_id" options="{'no_create': True}"/>
-                        <field name="product_name" readonly="0"/>
-                        <field name="product_image" widget="image" class="oe_avatar" readonly="0"/>
-                        <field name="show_product_url" />
+                        <field name="product" options="{'no_create': True}"/>
+                        <field name="content"/>
+                        <field name="image" widget="image"/>
                     </group>
                     <notebook>
                         <page string="Posts">
-                            <field name="post_ids" add_label="Thêm bài đăng">
-                                <tree string="Thêm bài đăng">
+                            <field name="post">
+                                <tree>
                                     <field name="page_id"/>
                                     <field name="comment"/>
                                     <field name="schedule_post"/>
@@ -26,7 +22,7 @@
                                     <field name="post_id" />
                                     <field name="post_url" widget="url" />
                                     <field name="state" />
-                                    <button name="post_product_to_facebook" string="Post to Facebook" type="object" class="oe_highlight"/>
+                                    <button name="post_to_facebook" string="Post to Facebook" type="object" class="oe_highlight"/>
                                     <button name="post_comment_to_facebook" type="object" string="Post Comment" class="oe_highlight"/>
                                 </tree>
                             </field>
@@ -37,44 +33,12 @@
         </field>
     </record>
 
-    <record id="view_marketing_product_tree" model="ir.ui.view">
-        <field name="name">marketing.product.tree</field>
-        <field name="model">marketing.product</field>
-        <field name="arch" type="xml">
-            <tree>
-                <!-- <field name="account_ids"  widget="many2many_tags"/>
-                <field name="page_ids"  widget="many2many_tags"/> -->
-                <field name="post_ids"/>
-                <field name="state"/>
-            </tree>
-        </field>
-    </record>
-
     <record id="action_marketing_product" model="ir.actions.act_window">
-        <field name="name">Marketing Products</field>
-        <field name="res_model">marketing.product</field>
+        <field name="name">Product Marketing Content</field>
+        <field name="res_model">marketing.content</field>
         <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_marketing_content_product_form"/>
+        <field name="domain">[('type', '=', 'product')]</field>
+        <field name="context">{'default_type': 'product'}</field>
     </record>
-
-    <data noupdate="0">
-        <!-- Rule for Marketing Post -->
-        <record id="marketing_post_rule" model="ir.rule">
-            <field name="name">Marketing Post Rule</field>
-            <field name="model_id" ref="model_marketing_product"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-        </record>
-
-        <!-- Access rights for Marketing Post -->
-        <record id="access_marketing_post_user" model="ir.model.access">
-            <field name="name">marketing.post user</field>
-            <field name="model_id" ref="model_marketing_product"/>
-            <field name="group_id" ref="base.group_user"/>
-            <field name="perm_read" eval="1"/>
-            <field name="perm_write" eval="1"/>
-            <field name="perm_create" eval="1"/>
-            <field name="perm_unlink" eval="1"/>
-        </record>
-    </data>
-
 </odoo>
