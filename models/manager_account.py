@@ -1,9 +1,13 @@
+
 import json
 import logging
 from odoo import models, fields, api
 import requests
 import base64
-import io
+from datetime import datetime, timedelta
+import time
+
+_logger = logging.getLogger(__name__)
 
 class ManagerAccount(models.Model):
     _name = 'manager.account'
@@ -13,13 +17,15 @@ class ManagerAccount(models.Model):
 
     # Thêm trường này
     is_favorite = fields.Boolean(string="Favorite", default=False, tracking=True)
-    
     account_name = fields.Char('User Name')
     account_id = fields.Char(string='Account ID', required=True)
     access_token = fields.Text('Access Token', required=True)
     account_avatar = fields.Binary('Avatar')
     page_ids = fields.One2many('facebook.page', 'account_id', string="Pages")
     display_name = fields.Char(compute='_compute_display_name')
+    cliend_id = fields.Char('Client ID', required=True)
+    id_secret = fields.Char('Client Secret', required=True)
+    last_token_refresh = fields.Datetime('Last Token Refresh')
 
     @api.depends('account_name')
     def _compute_display_name(self):
@@ -32,7 +38,47 @@ class ManagerAccount(models.Model):
             record.load_account_ava()
             record.load_pages()
         return True
-       
+    
+    def _cron_refresh_tokens(self):
+        accounts = self.search([])
+        for account in accounts:
+            if account.update_access_token():
+                account.load_data()
+
+    def update_access_token(self, max_retries=3, retry_delay=5):
+            now = fields.Datetime.now()
+            if not self.last_token_refresh or (now - self.last_token_refresh) > timedelta(minutes=1):
+                url = "https://graph.facebook.com/v20.0/oauth/access_token"
+                params = {
+                    "grant_type": "fb_exchange_token",
+                    "client_id": self.cliend_id,
+                    "client_secret": self.id_secret,
+                    "fb_exchange_token": self.access_token
+                }
+                for attempt in range(max_retries):
+                    try:
+                        response = requests.get(url, params=params)
+                        response.raise_for_status()
+                        data = response.json()
+                        if 'access_token' in data:
+                            self.access_token = data['access_token']
+                            self.last_token_refresh = now
+                            # _logger.info(f"Access token cập nhật cho tài khoảng {self.account_name}")
+                            _logger.info(f"Access token mới: {self.access_token}")
+                            return True
+                        else:
+                            _logger.warning(f"Unexpected response for account {self.account_name}: {data}")
+                    except requests.exceptions.RequestException as e:
+                        _logger.error(f"Error updating access token for account {self.account_name}: {str(e)}")
+                        if attempt < max_retries - 1:
+                            _logger.info(f"Retrying in {retry_delay} seconds...")
+                            time.sleep(retry_delay)
+                        else:
+                            _logger.error(f"Failed to update token after {max_retries} attempts")
+                            return False
+            return True
+
+
     def load_account_info(self):
         url_info_request = f'https://graph.facebook.com/v20.0/{self.account_id}?access_token={self.access_token}'  
         try:

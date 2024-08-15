@@ -8,11 +8,21 @@
                 <sheet>
                     <group>
                         <field name="content"/>
-                        <field name="image" widget="image"/>
+                        <field name="image_ids" 
+                              mode="kanban" 
+                                options="{
+                                    'create_text': 'Add Image',
+                                    'kanban_image_field': 'image',
+                                    'preview_image_field': 'image',
+                                    'kanban_view_ref': 'your_module.marketing_content_image_kanban_view'
+                                }" 
+                              context="{'default_res_model': 'marketing.content', 'default_res_id': active_id}"/>     
+                        <field name="url"/>
+                        <field name="include_link"/>
                     </group>
                     <notebook>
                         <page string="Posts">
-                            <field name="post">
+                            <field name="post_ids">
                                 <tree>
                                     <field name="page_id"/>
                                     <field name="comment"/>
@@ -38,5 +48,4 @@
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_marketing_content_general_form"/>
     </record>
-
 </odoo>

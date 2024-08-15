@@ -16,6 +16,9 @@
                     <group>
                         <field name="account_id"/>
                         <field name="access_token"/>
+                        <field name="cliend_id"/>
+                        <field name="id_secret"/>
+                        <field name="last_token_refresh"/>
                     </group>
                     <notebook colspan="1">
                         <page string="Account Information" name="account_info">
@@ -75,30 +78,30 @@
         </field>
     </record>
 
-        <record id="manager_account_tree" model="ir.ui.view">
-            <field name="name">manager.account.tree</field>
-            <field name="model">manager.account</field>
-            <field name="arch" type="xml">
-                <tree string="Tài khoản" create="1" delete="1" edit="0">
-                    <field name="is_favorite" widget="boolean_favorite" nolabel="1"/>
-                    <field name="account_avatar" readonly="1" widget="image"/>
-                    <field name="account_name" readonly="1"/>
-                </tree>
-            </field>
-        </record>
-        
-        <record id="action_manager_account" model="ir.actions.act_window">
-            <field name="name">Tài khoản</field>
-            <field name="res_model">manager.account</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="view_id" ref="manager_account_kanban"/>
-            <field name="domain">[]</field>
-            <field name="context">{}</field>
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">
-                    Hãy thêm một tài khoản
-                </p>
-            </field>
-        </record>
-        
+    <record id="manager_account_tree" model="ir.ui.view">
+        <field name="name">manager.account.tree</field>
+        <field name="model">manager.account</field>
+        <field name="arch" type="xml">
+            <tree string="Tài khoản" create="1" delete="1" edit="0">
+                <field name="is_favorite" widget="boolean_favorite" nolabel="1"/>
+                <field name="account_avatar" readonly="1" widget="image"/>
+                <field name="account_name" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_manager_account" model="ir.actions.act_window">
+        <field name="name">Tài khoản</field>
+        <field name="res_model">manager.account</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="manager_account_kanban"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Hãy thêm một tài khoản
+            </p>
+        </field>
+    </record>
+    
 </odoo>

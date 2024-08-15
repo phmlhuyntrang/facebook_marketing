@@ -7,14 +7,22 @@
             <form>
                 <sheet>
                     <group>
-                       <field name="blog" readonly="1"/>
-                       <field name="product" readonly="1"/>
-                        <field name="content" readonly="1"/>
-                        <field name="image" widget="image" readonly="1"/>
+                        <field name="content"/>
+                        <field name="image_ids" 
+                              mode="kanban" 
+                                options="{
+                                    'create_text': 'Add Image',
+                                    'kanban_image_field': 'image',
+                                    'preview_image_field': 'image',
+                                    'kanban_view_ref': 'your_module.marketing_content_image_kanban_view'
+                                }" 
+                              context="{'default_res_model': 'marketing.content', 'default_res_id': active_id}"/>     
+                        <field name="url"/>
+                        <field name="include_link"/>
                     </group>
                     <notebook>
                         <page string="Posts">
-                            <field name="post">
+                            <field name="post_ids">
                                 <tree>
                                     <field name="page_id" readonly="1"/>
                                     <field name="comment"/>
@@ -40,7 +48,7 @@
         <field name="arch" type="xml">
             <tree string="Posts">
                 <field name="content"/>
-                <field name="state"/>
+                <field name="has_posts"/>
             </tree>
         </field>
     </record>

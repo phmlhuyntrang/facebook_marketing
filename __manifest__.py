@@ -44,6 +44,7 @@
         'views/fb_marketing_comment_view.xml',
 
         'views/manager_post_view.xml',
+        'views/fb_marketing_content_image.xml',
         'views/fb_marketing_post_view.xml',
         'views/fb_marketing_content_view.xml',
         'views/fb_marketing_blog_view.xml',

@@ -15,16 +15,16 @@
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
-                    <group string="Content" class="custom_group">
+                    <!-- <group string="Content" class="custom_group">
                         <field name="content_id" options="{'no_create': True}"/>
-                    </group>
+                    </group> -->
                     <group string="Account &amp; Page" class="custom_group">
                         <field name="account_id" options="{'no_create': True}"/>
                         <field name="page_id" options="{'no_create': True}" domain="[('account_id', '=', account_id)]"/>
                         <field name="schedule_post"/>
                     </group>
                     <group string="Comment" class="custom_group">
-                        <field name="comment_suggestion_id" readonly="0"/>
+                        <!-- <field name="comment_suggestion_id" readonly="0"/> -->
                         <field name="comment"/>
                         <field name="remind_time"/>
                         <field name="start_auto_comment"/>
