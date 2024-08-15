@@ -150,12 +150,12 @@ class MarketingPost(models.Model):
             self.post_id = post_data.get('id')
             self.post_url = f"https://www.facebook.com/{self.post_id.replace('_', '/posts/')}"
 
-            if self.content_id.include_link and self.content_id.link:
+            if self.content_id.include_link and self.content_id.url:
                 try:
                     comment_response = requests.post(
                         f'https://graph.facebook.com/{self.post_id}/comments',
                         data={
-                            'message': self.content_id.link,
+                            'message': self.content_id.url,
                             'access_token': access_token
                         }
                     )
