@@ -189,7 +189,7 @@ class MarketingPost(models.Model):
             _logger.info(f"Đăng bình luận thành công cho bài viết '{self.post_id}' trên trang '{self.page_id.page_id}'")
 
         except requests.exceptions.RequestException as e:
-            _logger.error(f"Đăng bình luận thất bại cho bài viết '{self.post_id}' trên trang '{record.page_id.page_id}': {e}")
+            _logger.error(f"Đăng bình luận thất bại cho bài viết '{self.post_id}' trên trang '{self.page_id.page_id}': {e}")
 
     def _auto_comment(self):
         current_time = datetime.now()

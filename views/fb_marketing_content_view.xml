@@ -32,7 +32,6 @@
                                     <field name="post_url" widget="url" />
                                     <field name="state" />
                                     <button name="post_to_facebook" string="Post to Facebook" type="object" class="oe_highlight"/>
-                                    <button name="post_comment_to_facebook" type="object" string="Post Comment" class="oe_highlight"/>
                                 </tree>
                             </field>
                         </page>

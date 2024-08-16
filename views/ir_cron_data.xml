@@ -24,5 +24,17 @@
             <field name="doall" eval="False"/>
         </record>
 
+        <record id="ir_cron_refresh_account_facebook_tokens" model="ir.cron">
+            <field name="name">Refresh account Access Tokens</field>
+            <field name="model_id" ref="model_manager_account"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_refresh_tokens()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+
     </data>
 </odoo>
